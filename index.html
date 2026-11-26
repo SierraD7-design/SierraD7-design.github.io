@@ -3,71 +3,397 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sierra | Personal Website</title>
+  <title>Sierra — Making things on the internet</title>
+  <meta name="description" content="The personal site of Sierra: projects, notes, and things learned along the way.">
+  <meta property="og:title" content="Sierra — Making things on the internet">
+  <meta property="og:description" content="Projects, notes, and things learned along the way.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0b1020">
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #f6f7f9;
-      --card: #ffffff;
-      --text: #1c1e21;
-      --muted: #60636a;
-      --accent: #2f6fed;
+      --bg: #0b1020;
+      --surface: #151b34;
+      --surface-2: #1d2544;
+      --ink: #f8f9ff;
+      --muted: #aab2d8;
+      --pink: #ff5ca8;
+      --purple: #9b6cff;
+      --cyan: #2ad4e8;
+      --lime: #c2f651;
+      --radius: 20px;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111318;
-        --card: #1c1f26;
-        --text: #f2f3f5;
-        --muted: #a9adb6;
-        --accent: #7aa2ff;
-      }
-    }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
       background: var(--bg);
-      color: var(--text);
+      color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
+      line-height: 1.65;
+      overflow-x: hidden;
     }
-    main {
-      width: 100%;
+
+    /* colorful glow behind the hero */
+    body::before {
+      content: "";
+      position: absolute;
+      top: -260px;
+      left: 50%;
+      width: 1100px;
+      height: 900px;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255, 92, 168, 0.45), transparent 45%),
+        radial-gradient(circle at 75% 25%, rgba(42, 212, 232, 0.35), transparent 45%),
+        radial-gradient(circle at 50% 65%, rgba(155, 108, 255, 0.45), transparent 55%);
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1080px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* ---------- nav ---------- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 16, 32, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.1rem;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg, var(--pink), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .nav-links a { text-decoration: none; color: var(--muted); transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ---------- hero ---------- */
+    header { padding: 120px 0 90px; }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 9vw, 6.2rem);
+      line-height: 1.02;
+      letter-spacing: -0.055em;
+      margin: 0 0 24px;
+      font-weight: 850;
+    }
+
+    .gradient-text {
+      background: linear-gradient(100deg, var(--pink) 0%, var(--purple) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
       max-width: 620px;
-      background: var(--card);
-      border-radius: 16px;
-      padding: 48px 40px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      color: var(--muted);
+      margin: 0 0 36px;
+    }
+
+    .buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 24px;
+      border-radius: 999px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-primary {
+      background: linear-gradient(100deg, var(--pink), var(--purple));
+      color: #fff;
+      box-shadow: 0 12px 30px rgba(255, 92, 168, 0.28);
+    }
+
+    .btn-ghost { border: 1px solid rgba(255, 255, 255, 0.28); color: var(--ink); }
+
+    /* ---------- sections ---------- */
+    section { padding: 80px 0; }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin: 0 0 36px;
+      font-weight: 820;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(160deg, var(--surface), var(--surface-2));
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 92, 168, 0.55);
+    }
+
+    .card .icon { font-size: 2rem; margin-bottom: 14px; }
+
+    .card h3 { margin: 0 0 10px; font-size: 1.25rem; letter-spacing: -0.02em; }
+
+    .card p { margin: 0 0 20px; color: var(--muted); }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(155, 108, 255, 0.16);
+      color: #d6c6ff;
+    }
+
+    .card a.link {
+      font-weight: 750;
+      color: var(--lime);
+      text-decoration: none;
+    }
+
+    .card a.link:hover { text-decoration: underline; }
+
+    .about-box {
+      background: linear-gradient(135deg, rgba(255, 92, 168, 0.12), rgba(42, 212, 232, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+      padding: 36px;
+      max-width: 760px;
+    }
+
+    .about-box p { font-size: 1.1rem; color: var(--muted); margin: 0 0 20px; }
+    .about-box p:last-child { margin-bottom: 0; }
+
+    .post {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 22px 0;
+    }
+
+    .post h3 { margin: 0; font-size: 1.2rem; }
+    .post span { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+    .badge { color: var(--pink); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; }
+
+    .contact {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(155, 108, 255, 0.2), rgba(255, 92, 168, 0.16));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 64px 28px;
+    }
+
+    .contact h2 { margin-bottom: 14px; }
+    .contact p { color: var(--muted); margin: 0 0 30px; }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 0.85rem;
       text-align: center;
     }
-    h1 { margin: 0 0 12px; font-size: 2.2rem; }
-    p { margin: 0 0 32px; color: var(--muted); font-size: 1.1rem; }
-    nav { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      border-radius: 999px;
-      padding: 10px 20px;
-      font-weight: 600;
-      transition: background 0.15s ease, color 0.15s ease;
+
+    @media (max-width: 620px) {
+      header { padding: 80px 0 60px; }
+      .nav-links { gap: 14px; font-size: 0.85rem; }
+      section { padding: 60px 0; }
+      .post { flex-direction: column; gap: 4px; }
     }
-    a:hover { background: var(--accent); color: var(--card); }
-    footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Hi, I'm Sierra 👋</h1>
-    <p>Welcome to my personal website. This is just the beginning — more to come soon.</p>
-    <nav>
-      <a href="https://github.com/SierraD7-design">GitHub</a>
-      <a href="mailto:hello@example.com">Email</a>
-    </nav>
-    <footer>Built with GitHub Pages</footer>
-  </main>
+
+  <nav>
+    <div class="wrap nav-inner">
+      <a class="logo" href="#top">sierra<span>.</span></a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#writing">Writing</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top">
+    <div class="wrap">
+      <!-- EDIT: your intro line -->
+      <span class="eyebrow">Hi, I'm Sierra 👋</span>
+      <h1>Making things<br><span class="gradient-text">on the internet.</span></h1>
+      <p>A home for my projects, notes, and whatever I'm learning next. Built one commit at a time.</p>
+      <div class="buttons">
+        <a class="btn btn-primary" href="#projects">See my work</a>
+        <a class="btn btn-ghost" href="https://github.com/SierraD7-design" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="wrap">
+      <p class="section-label">01 — About</p>
+      <h2>A little about me</h2>
+      <div class="about-box">
+        <!-- EDIT: replace this with your own bio -->
+        <p>I'm Sierra — a curious maker who likes turning ideas into things you can actually use. This site is where I collect those experiments, share what I'm learning, and leave a trail of my work.</p>
+        <p>Right now I'm exploring web development, design, and building small projects from scratch. More soon.</p>
+        <div class="tags">
+          <span class="tag">Web development</span>
+          <span class="tag">Design</span>
+          <span class="tag">Learning in public</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <p class="section-label">02 — Projects</p>
+      <h2>Things I've made</h2>
+      <div class="grid">
+        <!-- EDIT: swap these cards for your real projects -->
+        <article class="card">
+          <div class="icon">🌐</div>
+          <h3>This website</h3>
+          <p>My corner of the internet — designed, built, and published with GitHub Pages.</p>
+          <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">GitHub Pages</span></div>
+          <a class="link" href="https://github.com/SierraD7-design/SierraD7-design.github.io" target="_blank" rel="noopener">View the code ↗</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">🐙</div>
+          <h3>GitHub profile</h3>
+          <p>Where my experiments, repositories, and contributions live. Follow along as I build.</p>
+          <div class="tags"><span class="tag">Open source</span><span class="tag">Experiments</span></div>
+          <a class="link" href="https://github.com/SierraD7-design" target="_blank" rel="noopener">Visit profile ↗</a>
+        </article>
+
+        <article class="card">
+          <div class="icon">✨</div>
+          <h3>Next project</h3>
+          <p>A space reserved for whatever I build next. Ideas welcome.</p>
+          <div class="tags"><span class="tag">Coming soon</span></div>
+          <span class="badge">IN PROGRESS</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="wrap">
+      <p class="section-label">03 — Writing</p>
+      <h2>Notes &amp; thoughts</h2>
+      <div class="post">
+        <h3>Hello world — why I made this site</h3>
+        <span class="badge">FIRST POST</span>
+      </div>
+      <div class="post">
+        <h3>What I'm learning right now</h3>
+        <span class="badge">SOON</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <p class="section-label">04 — Contact</p>
+        <!-- EDIT: put your real email in the mailto link below -->
+        <h2>Let's say hello</h2>
+        <p>Have an idea, a question, or just want to connect? My inbox is open.</p>
+        <div class="buttons" style="justify-content: center;">
+          <a class="btn btn-primary" href="mailto:hello@example.com">Send me an email</a>
+          <a class="btn btn-ghost" href="https://github.com/SierraD7-design" target="_blank" rel="noopener">Find me on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">Built by Sierra · Powered by GitHub Pages · <a href="#top">Back to top ↑</a></div>
+  </footer>
+
 </body>
 </html>
