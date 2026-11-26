@@ -102,22 +102,22 @@
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 72px;
-      align-items: center;
+      align-items: start;
     }
+
+    /* keep the portrait in view while the long intro is read */
+    .hero figure { position: sticky; top: 110px; }
 
     .hero h1 {
       font-size: clamp(4.5rem, 12vw, 8.5rem);
       line-height: 0.92;
-      margin: 0 0 26px;
+      margin: 40px 0 26px;
     }
     .hero h1 span { color: var(--rose); }
 
-    .lede {
-      font-size: 1.2rem;
-      max-width: 28ch;
-      margin: 0 0 30px;
-      color: var(--plum);
-    }
+    .intro-copy { max-width: 62ch; margin-bottom: 8px; }
+    .intro-copy p { margin: 0 0 18px; line-height: 1.78; }
+    .intro-copy p:last-child { margin-bottom: 0; }
 
     .hero-links { display: flex; gap: 22px; flex-wrap: wrap; font-size: 0.9rem; }
     .hero-links a { font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--rose); }
@@ -226,7 +226,8 @@
 
     @media (max-width: 760px) {
       .hero-grid, .featured-grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero h1 { font-size: clamp(4rem, 18vw, 6rem); }
+      .hero figure { position: static; }
+      .hero h1 { font-size: clamp(4rem, 18vw, 6rem); margin-top: 32px; }
       .portrait { max-width: 360px; }
     }
 
@@ -252,8 +253,21 @@
       <div>
         <!-- EDIT: your name and intro -->
         <p class="epigraph">“Pay attention. Be astonished. Tell about it.” <span class="credit">- Mary Oliver</span></p>
+
+        <div class="intro-copy">
+          <p>I think that one of the wonders of humanity is the capacity within each of us to be astonished. The sense of wonder and excitement that washes over you when you experience something new. When you meet that goal you’ve been working towards. When you see or hear something genuine or refreshing. When you fail, pick yourself up off the ground, and try again. That thing that once felt unattainable is no longer a dream but a reality. The great irony here… that feeling, that astonishment, is something that you have to allow yourself to feel.</p>
+
+          <p>In some ways, it feels like I have lived 500 different lives. Some were rather dull, but others shine in my memory. What makes those bright spots stand out in my memory? Those were the moments, experiences, and chapters that I navigated with a hunger for knowledge. One of those is a chapter of my life that has recently come to a close: my time at the University of North Carolina at Chapel Hill. College was not easy and my first two years were filled with many challenges. Now that I’ve graduated, moved to a new state, and started a new job, I keep coming back to the experiences at Carolina that shaped my sense of what was possible. Some of these moments felt small when they happened. It’s only now, with a little distance, that I can see how much they changed me.</p>
+
+          <p>Like the political theory course I took in the fall of my junior year. I wasn’t very excited to take a political theory course, and I definitely wasn’t excited to take on the identity of a Jacobin during the French Revolution. That class pushed me like no other had. I exercised my critical thinking skills in new ways, leaving me with new muscles to flex after the fact. Not only did I push my thinking, but I unlocked a new passion. I fell in love with political theory and went on to take several simulation-style courses with that professor, who became one of my favorites.</p>
+
+          <p>When I think about what I want to do with my life, I think about how I felt at the end of that class. I’d spent a semester wrestling with ideas I hadn’t expected to care about, and I wanted to keep going. I want to keep giving unfamiliar things a chance, even when my first instinct is to write them off. I want to spend time with ideas that challenge me and see how those experiences change the way I think and the person I’m becoming.</p>
+
+          <p>This site is where I’ll write about what I’m learning along the way. I hope that, years from now, I’ll be able to look back and see all the ways I’ve allowed myself to be astonished.</p>
+        </div>
+
         <h1>Sierra<span>.</span></h1>
-        <p class="lede">A warm little corner of the internet for things I make, things I notice, and things I'm still learning.</p>
+
         <div class="hero-links">
           <a href="#projects">Selected work</a>
           <a href="https://github.com/SierraD7-design" target="_blank" rel="noopener">GitHub ↗</a>
