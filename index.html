@@ -215,6 +215,19 @@
     .writing-item h3 { font-size: 1.2rem; margin: 0; }
     .writing-item span { font-size: 0.85rem; color: var(--olive); white-space: nowrap; }
 
+    .substack-box {
+      max-width: 620px;
+      margin-top: 40px;
+      padding: 26px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+    .substack-box h3 { font-size: 1.5rem; margin: 0 0 8px; }
+    .substack-box p { margin: 0 0 18px; font-size: 0.95rem; }
+    .substack-box iframe { display: block; width: 100%; height: 320px; border: 0; background: #fff; }
+    .substack-link { display: inline-block; margin-top: 16px; font-size: 0.9rem; font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--rose); }
+
     .contact { padding: 84px 0; border-top: 1px solid var(--line); text-align: center; }
     .contact h2 { font-size: clamp(2.4rem, 6vw, 4rem); margin: 0 0 16px; }
     .contact p { margin: 0 0 28px; }
@@ -243,6 +256,7 @@
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#writing">Writing</a>
+        <a href="https://sierralowder.substack.com" target="_blank" rel="noopener">Substack</a>
         <a href="#contact">Contact</a>
       </div>
     </div>
@@ -347,6 +361,14 @@
       <div class="writing-list">
         <div class="writing-item"><h3>Hello world — why I made this site</h3><span>First post</span></div>
         <div class="writing-item"><h3>What I'm learning right now</h3><span>Soon</span></div>
+      </div>
+
+      <!-- EDIT: Substack publication URL -->
+      <div class="substack-box">
+        <h3>Get the letters</h3>
+        <p>Short notes on what I'm reading, making, and learning — delivered when there's something worth saying.</p>
+        <iframe src="https://sierralowder.substack.com/embed" title="Subscribe to Sierra's Substack" scrolling="no" frameborder="0"></iframe>
+        <a class="substack-link" href="https://sierralowder.substack.com" target="_blank" rel="noopener">Read on Substack ↗</a>
       </div>
     </div>
   </section>
