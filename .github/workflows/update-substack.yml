@@ -16,38 +16,39 @@ jobs:
 
       - name: Fetch newest post from Substack RSS
         run: |
-          curl -fsSL -A 'Mozilla/5.0' https://sierralowder.substack.com/feed -o feed.xml
+          curl -fsSL 'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fsierralowder.substack.com%2Ffeed' -o feed.json
           python3 - <<'PY'
           import html
           import json
           import re
-          import xml.etree.ElementTree as ET
 
-          root = ET.parse('feed.xml').getroot()
-          items = root.findall('./channel/item')
+          with open('feed.json', encoding='utf-8') as f:
+              data = json.load(f)
+
+          items = data.get('items') or []
           if not items:
               raise SystemExit('No posts in feed')
 
           item = items[0]
-          title = (item.findtext('title') or 'Latest post').strip()
-          url = (item.findtext('link') or '').strip()
+          title = (item.get('title') or 'Latest post').strip()
+          url = (item.get('link') or '').strip()
           if not url:
               raise SystemExit('No post URL in feed')
 
-          description = item.findtext('description') or ''
+          description = item.get('description') or ''
           subtitle = html.unescape(re.sub('<[^>]+>', '', description)).strip()
 
           result = {
               'title': title,
               'url': url,
               'subtitle': subtitle,
-              'date': (item.findtext('pubDate') or '').strip(),
+              'date': (item.get('pubDate') or '').strip(),
           }
           with open('latest-post.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
               f.write('\n')
           PY
-          rm feed.xml
+          rm feed.json
 
       - name: Commit updated post data
         run: |
