@@ -14,34 +14,40 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch newest post from Substack
+      - name: Fetch newest post from Substack RSS
         run: |
-          curl -fsSL https://sierralowder.substack.com/api/v1/posts -o posts.json
+          curl -fsSL -A 'Mozilla/5.0' https://sierralowder.substack.com/feed -o feed.xml
           python3 - <<'PY'
+          import html
           import json
+          import re
+          import xml.etree.ElementTree as ET
 
-          with open('posts.json', encoding='utf-8') as f:
-              data = json.load(f)
+          root = ET.parse('feed.xml').getroot()
+          items = root.findall('./channel/item')
+          if not items:
+              raise SystemExit('No posts in feed')
 
-          posts = [
-              p for p in data.get('posts', [])
-              if p.get('canonical_url') and 'coming-soon' not in p['canonical_url']
-          ]
-          if not posts:
-              raise SystemExit('No published posts found')
+          item = items[0]
+          title = (item.findtext('title') or 'Latest post').strip()
+          url = (item.findtext('link') or '').strip()
+          if not url:
+              raise SystemExit('No post URL in feed')
 
-          post = posts[0]
+          description = item.findtext('description') or ''
+          subtitle = html.unescape(re.sub('<[^>]+>', '', description)).strip()
+
           result = {
-              'title': (post.get('title') or 'Latest post').strip(),
-              'url': post['canonical_url'],
-              'subtitle': post.get('subtitle') or '',
-              'date': post.get('post_date') or post.get('published_at') or '',
+              'title': title,
+              'url': url,
+              'subtitle': subtitle,
+              'date': (item.findtext('pubDate') or '').strip(),
           }
           with open('latest-post.json', 'w', encoding='utf-8') as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
               f.write('\n')
           PY
-          rm posts.json
+          rm feed.xml
 
       - name: Commit updated post data
         run: |
