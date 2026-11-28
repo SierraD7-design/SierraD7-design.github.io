@@ -193,6 +193,7 @@
 
     /* ---------- sections ---------- */
     section.block { padding: 72px 0; border-top: 1px solid var(--line); }
+    #writing { border-top: 0; padding-top: 44px; }
     h2.section-title { font-size: clamp(2rem, 4.5vw, 2.8rem); margin: 0 0 36px; }
 
     .about { max-width: 700px; font-size: 1.15rem; }
@@ -328,6 +329,22 @@
 
   <div class="wrap"><hr class="rule"></div>
 
+  <section class="block" id="writing">
+    <div class="wrap">
+      <h2 class="section-title">Check Out Some of My Latest Work</h2>
+      <!-- EDIT: default card shows your current post; the script upgrades it to the newest one -->
+      <a class="latest-card" id="latest-card" href="https://sierralowder.substack.com/p/to-be-astonished" target="_blank" rel="noopener">
+        <span class="latest-label">Latest on Substack</span>
+        <h3 class="latest-title" id="latest-title">To Be Astonished</h3>
+        <p class="latest-subtitle" id="latest-subtitle">Let’s try something new.</p>
+        <span class="latest-meta">
+          <span class="latest-date" id="latest-date">November 28, 2026</span>
+          <span class="latest-cta">Read the post ↗</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
   <section class="featured">
     <div class="wrap">
       <p class="label">Featured piece</p>
@@ -380,29 +397,6 @@
           <p class="meta">Coming soon</p>
         </article>
       </div>
-    </div>
-  </section>
-
-  <section class="block" id="writing">
-    <div class="wrap">
-      <p class="label">03 — Writing</p>
-      <h2 class="section-title">Notes</h2>
-      <!-- EDIT: your posts -->
-      <div class="writing-list">
-        <div class="writing-item"><h3>Hello world — why I made this site</h3><span>First post</span></div>
-        <div class="writing-item"><h3>What I'm learning right now</h3><span>Soon</span></div>
-      </div>
-
-      <!-- EDIT: default card shows your current post; the script upgrades it to the newest one -->
-      <a class="latest-card" id="latest-card" href="https://sierralowder.substack.com/p/to-be-astonished" target="_blank" rel="noopener">
-        <span class="latest-label">Latest on Substack</span>
-        <h3 class="latest-title" id="latest-title">To Be Astonished</h3>
-        <p class="latest-subtitle" id="latest-subtitle">Let’s try something new.</p>
-        <span class="latest-meta">
-          <span class="latest-date" id="latest-date">November 28, 2026</span>
-          <span class="latest-cta">Read the post ↗</span>
-        </span>
-      </a>
     </div>
   </section>
 
