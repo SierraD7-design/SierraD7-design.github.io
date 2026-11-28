@@ -1,0 +1,56 @@
+name: Update latest Substack post
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch newest post from Substack
+        run: |
+          curl -fsSL https://sierralowder.substack.com/api/v1/posts -o posts.json
+          python3 - <<'PY'
+          import json
+
+          with open('posts.json', encoding='utf-8') as f:
+              data = json.load(f)
+
+          posts = [
+              p for p in data.get('posts', [])
+              if p.get('canonical_url') and 'coming-soon' not in p['canonical_url']
+          ]
+          if not posts:
+              raise SystemExit('No published posts found')
+
+          post = posts[0]
+          result = {
+              'title': (post.get('title') or 'Latest post').strip(),
+              'url': post['canonical_url'],
+              'subtitle': post.get('subtitle') or '',
+              'date': post.get('post_date') or post.get('published_at') or '',
+          }
+          with open('latest-post.json', 'w', encoding='utf-8') as f:
+              json.dump(result, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          PY
+          rm posts.json
+
+      - name: Commit updated post data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add latest-post.json
+          if git diff --cached --quiet; then
+            echo "No change to latest post"
+          else
+            git commit -m "Update latest Substack post"
+            git push
+          fi

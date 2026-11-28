@@ -429,50 +429,34 @@
       var title = document.getElementById('latest-title');
       var subtitle = document.getElementById('latest-subtitle');
       var date = document.getElementById('latest-date');
-      var source = 'https://sierralowder.substack.com/api/v1/posts';
-      var providers = [
-        'https://api.allorigins.win/raw?url=' + encodeURIComponent(source),
-        'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(source)
-      ];
 
-      function tryProvider(index) {
-        if (index >= providers.length) { return; }
+      fetch('latest-post.json')
+        .then(function (response) {
+          if (!response.ok) { throw new Error('HTTP ' + response.status); }
+          return response.json();
+        })
+        .then(function (post) {
+          if (!post || !post.url) { return; }
 
-        fetch(providers[index])
-          .then(function (response) {
-            if (!response.ok) { throw new Error('HTTP ' + response.status); }
-            return response.json();
-          })
-          .then(function (data) {
-            var posts = (data.posts || []).filter(function (post) {
-              return post.canonical_url && post.canonical_url.indexOf('coming-soon') === -1;
+          card.href = post.url;
+          title.textContent = (post.title || 'Latest post').trim();
+
+          if (post.subtitle) {
+            subtitle.textContent = post.subtitle;
+            subtitle.style.display = '';
+          } else {
+            subtitle.style.display = 'none';
+          }
+
+          if (post.date) {
+            date.textContent = new Date(post.date).toLocaleDateString('en-US', {
+              month: 'long', day: 'numeric', year: 'numeric'
             });
-            if (!posts.length) { throw new Error('No posts'); }
-
-            var post = posts[0];
-            card.href = post.canonical_url;
-            title.textContent = (post.title || 'Latest post').trim();
-
-            if (post.subtitle) {
-              subtitle.textContent = post.subtitle;
-              subtitle.style.display = '';
-            } else {
-              subtitle.style.display = 'none';
-            }
-
-            var rawDate = post.post_date || post.published_at;
-            if (rawDate) {
-              date.textContent = new Date(rawDate).toLocaleDateString('en-US', {
-                month: 'long', day: 'numeric', year: 'numeric'
-              });
-            }
-          })
-          .catch(function () {
-            tryProvider(index + 1);
-          });
-      }
-
-      tryProvider(0);
+          }
+        })
+        .catch(function () {
+          // Keep the hand-written card below if the data file can't be read.
+        });
     })();
   </script>
 
