@@ -215,61 +215,48 @@
     .writing-item h3 { font-size: 1.2rem; margin: 0; }
     .writing-item span { font-size: 0.85rem; color: var(--olive); white-space: nowrap; }
 
-    .substack-box {
-      max-width: 620px;
+    .latest-card {
+      display: block;
+      max-width: 680px;
       margin-top: 40px;
-      padding: 26px;
+      padding: 34px 36px;
       background: var(--paper);
       border: 1px solid var(--line);
+      border-left: 4px solid var(--rose);
       border-radius: 2px;
+      text-decoration: none;
+      color: var(--plum);
+      transition: transform 0.25s ease, border-color 0.25s ease;
     }
-    .substack-box h3 { font-size: 1.5rem; margin: 0 0 8px; }
-    .substack-box p { margin: 0 0 18px; font-size: 0.95rem; }
-    .substack-actions { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; }
-    .posts-trigger {
-      background: none;
-      border: 0;
-      border-bottom: 1px solid var(--rose);
-      padding: 0;
-      font: inherit;
-      font-size: 0.9rem;
+    .latest-card:hover { transform: translateY(-4px); border-color: var(--rose); }
+    .latest-label {
+      display: block;
+      font-size: 0.72rem;
       font-weight: 700;
-      color: var(--rose);
-      cursor: pointer;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-bottom: 14px;
     }
-    .posts-trigger:hover { color: var(--plum); border-color: var(--plum); }
-    .substack-link { display: inline-block; font-size: 0.9rem; font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--rose); }
-
-    /* recent-posts popup */
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
+    .latest-title {
+      font-family: var(--heading);
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.15;
+      margin: 0 0 10px;
+    }
+    .latest-subtitle { margin: 0 0 22px; font-style: italic; color: var(--olive); }
+    .latest-meta {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(56, 39, 51, 0.6);
-      z-index: 50;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
     }
-    .modal.open { display: flex; }
-    .modal-panel {
-      width: min(640px, 100%);
-      max-height: 82vh;
-      overflow: auto;
-      background: var(--ivory);
-      border: 1px solid var(--plum);
-      border-radius: 2px;
-      padding: 30px;
-      box-shadow: 0 24px 60px rgba(56, 39, 51, 0.3);
-    }
-    .modal-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
-    .modal-head h3 { font-size: 1.9rem; margin: 0; }
-    .modal-close { background: none; border: 0; font-size: 1.7rem; line-height: 1; color: var(--plum); cursor: pointer; }
-    .post-list { list-style: none; padding: 0; margin: 22px 0; }
-    .post-list li { padding: 16px 0; border-top: 1px solid var(--line); }
-    .post-list a { font-family: var(--heading); font-size: 1.15rem; text-decoration: none; }
-    .post-list a:hover { color: var(--plum); }
-    .post-list .date { display: block; font-size: 0.8rem; color: var(--olive); margin-top: 4px; }
+    .latest-date { font-size: 0.82rem; color: var(--olive); }
+    .latest-cta { font-size: 0.9rem; font-weight: 700; color: var(--rose); border-bottom: 1px solid var(--rose); }
+    .latest-card:hover .latest-cta { color: var(--plum); border-color: var(--plum); }
 
     .contact { padding: 84px 0; border-top: 1px solid var(--line); text-align: center; }
     .contact h2 { font-size: clamp(2.4rem, 6vw, 4rem); margin: 0 0 16px; }
@@ -406,15 +393,16 @@
         <div class="writing-item"><h3>What I'm learning right now</h3><span>Soon</span></div>
       </div>
 
-      <!-- EDIT: Substack publication URL -->
-      <div class="substack-box">
-        <h3>Recent writing</h3>
-        <p>Short notes on what I'm reading, making, and learning. Open the popup to see the latest posts from Substack without leaving this page.</p>
-        <div class="substack-actions">
-          <button class="posts-trigger" id="posts-trigger" type="button">View recent posts ↗</button>
-          <a class="substack-link" href="https://sierralowder.substack.com" target="_blank" rel="noopener">Read my latest post ↗</a>
-        </div>
-      </div>
+      <!-- EDIT: default card shows your current post; the script upgrades it to the newest one -->
+      <a class="latest-card" id="latest-card" href="https://sierralowder.substack.com/p/to-be-astonished" target="_blank" rel="noopener">
+        <span class="latest-label">Latest on Substack</span>
+        <h3 class="latest-title" id="latest-title">To Be Astonished</h3>
+        <p class="latest-subtitle" id="latest-subtitle">Let’s try something new.</p>
+        <span class="latest-meta">
+          <span class="latest-date" id="latest-date">November 28, 2026</span>
+          <span class="latest-cta">Read the post ↗</span>
+        </span>
+      </a>
     </div>
   </section>
 
@@ -435,101 +423,56 @@
     <div class="wrap">Made by Sierra · <a href="#top">Back to top ↑</a></div>
   </footer>
 
-  <!-- Recent Substack posts popup -->
-  <div class="modal" id="posts-modal" role="dialog" aria-modal="true" aria-labelledby="posts-modal-title">
-    <div class="modal-panel">
-      <div class="modal-head">
-        <h3 id="posts-modal-title">Recent posts</h3>
-        <button class="modal-close" id="posts-close" type="button" aria-label="Close">×</button>
-      </div>
-      <ul class="post-list" id="post-list">
-        <li>Loading posts…</li>
-      </ul>
-      <a class="substack-link" href="https://sierralowder.substack.com" target="_blank" rel="noopener">Visit Substack ↗</a>
-    </div>
-  </div>
-
   <script>
     (function () {
-      var trigger = document.getElementById('posts-trigger');
-      var modal = document.getElementById('posts-modal');
-      var closeBtn = document.getElementById('posts-close');
-      var list = document.getElementById('post-list');
+      var card = document.getElementById('latest-card');
+      var title = document.getElementById('latest-title');
+      var subtitle = document.getElementById('latest-subtitle');
+      var date = document.getElementById('latest-date');
       var source = 'https://sierralowder.substack.com/api/v1/posts';
-      var feed = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(source);
-      var loaded = false;
+      var providers = [
+        'https://api.allorigins.win/raw?url=' + encodeURIComponent(source),
+        'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(source)
+      ];
 
-      function addItem(title, url, detail) {
-        var li = document.createElement('li');
-        var a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = title;
-        var meta = document.createElement('span');
-        meta.className = 'date';
-        meta.textContent = detail;
-        li.appendChild(a);
-        li.appendChild(meta);
-        list.appendChild(li);
-      }
+      function tryProvider(index) {
+        if (index >= providers.length) { return; }
 
-      function loadPosts() {
-        list.textContent = '';
-        var loading = document.createElement('li');
-        loading.textContent = 'Loading posts…';
-        list.appendChild(loading);
-
-        fetch(feed)
+        fetch(providers[index])
           .then(function (response) {
             if (!response.ok) { throw new Error('HTTP ' + response.status); }
             return response.json();
           })
           .then(function (data) {
-            var posts = (data.posts || []).filter(function (post) { return post.canonical_url; }).slice(0, 5);
-            list.textContent = '';
-            if (!posts.length) {
-              var empty = document.createElement('li');
-              empty.textContent = 'No posts yet — check back soon.';
-              list.appendChild(empty);
-              return;
-            }
-            posts.forEach(function (post) {
-              var detail = 'Substack';
-              if (post.published_at) {
-                detail = new Date(post.published_at).toLocaleDateString('en-US', {
-                  month: 'long', day: 'numeric', year: 'numeric'
-                });
-              }
-              addItem(post.title || 'Untitled', post.canonical_url, detail);
+            var posts = (data.posts || []).filter(function (post) {
+              return post.canonical_url && post.canonical_url.indexOf('coming-soon') === -1;
             });
-            loaded = true;
+            if (!posts.length) { throw new Error('No posts'); }
+
+            var post = posts[0];
+            card.href = post.canonical_url;
+            title.textContent = (post.title || 'Latest post').trim();
+
+            if (post.subtitle) {
+              subtitle.textContent = post.subtitle;
+              subtitle.style.display = '';
+            } else {
+              subtitle.style.display = 'none';
+            }
+
+            var rawDate = post.post_date || post.published_at;
+            if (rawDate) {
+              date.textContent = new Date(rawDate).toLocaleDateString('en-US', {
+                month: 'long', day: 'numeric', year: 'numeric'
+              });
+            }
           })
           .catch(function () {
-            list.textContent = '';
-            var error = document.createElement('li');
-            error.textContent = 'Couldn’t load posts right now. Use the link below to view them on Substack.';
-            list.appendChild(error);
+            tryProvider(index + 1);
           });
       }
 
-      function openModal() {
-        modal.classList.add('open');
-        if (!loaded) { loadPosts(); }
-      }
-
-      function closeModal() {
-        modal.classList.remove('open');
-      }
-
-      trigger.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', function (event) {
-        if (event.target === modal) { closeModal(); }
-      });
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') { closeModal(); }
-      });
+      tryProvider(0);
     })();
   </script>
 
